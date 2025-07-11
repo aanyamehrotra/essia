@@ -96,35 +96,37 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 px-4 py-8">
+      <div className="w-full max-w-sm sm:max-w-md">
         <Card className="shadow-lg border-purple-200 dark:border-purple-800">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-purple-900 dark:text-purple-100">
+          <CardHeader className="text-center space-y-2 pb-6">
+            <CardTitle className="text-xl sm:text-2xl text-purple-900 dark:text-purple-100">
               Create Account
             </CardTitle>
-            <CardDescription className="text-purple-600 dark:text-purple-300">
+            <CardDescription className="text-purple-600 dark:text-purple-300 text-sm sm:text-base">
               Join Essia and start shopping
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 sm:px-6">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit, onInvalid)}
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
               >
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <FormField
                     control={form.control}
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-purple-800 dark:text-purple-200">First Name</FormLabel>
+                        <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                          First Name
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="First name"
                             {...field}
-                            className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                            className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11 text-sm"
                           />
                         </FormControl>
                         <FormMessage />
@@ -136,12 +138,14 @@ export default function Register() {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-purple-800 dark:text-purple-200">Last Name</FormLabel>
+                        <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                          Last Name
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Last name"
                             {...field}
-                            className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                            className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11 text-sm"
                           />
                         </FormControl>
                         <FormMessage />
@@ -154,13 +158,15 @@ export default function Register() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-purple-800 dark:text-purple-200">Email</FormLabel>
+                      <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                        Email
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter your email"
                           type="email"
                           {...field}
-                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -172,12 +178,14 @@ export default function Register() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-purple-800 dark:text-purple-200">Password</FormLabel>
+                      <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                        Password
+                      </FormLabel>
                       <FormControl>
                         <PasswordInput
                           placeholder="Create a password"
                           {...field}
-                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -189,12 +197,14 @@ export default function Register() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-purple-800 dark:text-purple-200">Confirm Password</FormLabel>
+                      <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                        Confirm Password
+                      </FormLabel>
                       <FormControl>
                         <PasswordInput
                           placeholder="Re-enter your password"
                           {...field}
-                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -203,14 +213,14 @@ export default function Register() {
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white h-10 sm:h-11 text-sm sm:text-base"
                   disabled={registerMutation.isPending}
                 >
                   {registerMutation.isPending ? "Creating account..." : "Create Account"}
                 </Button>
               </form>
             </Form>
-            <div className="mt-6 text-center">
+            <div className="mt-4 sm:mt-6 text-center">
               <p className="text-sm text-purple-600 dark:text-purple-300">
                 Already have an account?{" "}
                 <Link href="/login" className="text-purple-800 hover:text-purple-900 dark:text-purple-200 font-medium">

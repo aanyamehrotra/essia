@@ -70,29 +70,29 @@ export default function ProfileSidebar() {
   ];
 
   return (
-    <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-5 space-y-6">
+    <div className="w-full max-w-sm bg-white shadow-lg rounded-lg p-4 sm:p-5 space-y-4 sm:space-y-6">
       {/* User Info */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center font-semibold text-lg">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center font-semibold text-base sm:text-lg">
           {user?.username?.charAt(0)?.toUpperCase() || "?"}
         </div>
-        <div>
-          <p className="text-sm font-medium">{user?.username}</p>
-          <p className="text-xs text-gray-500">{user?.email}</p>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-medium truncate">{user?.username}</p>
+          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
         </div>
       </div>
 
       {/* Menu Sections */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {menuSections.map((section) => (
           <div key={section.title}>
             <p className="text-sm font-semibold text-gray-700 mb-2">{section.title}</p>
             <div className="space-y-1">
               {section.items.map((item) => (
                 <Link key={item.label} href={item.href}>
-                  <div className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-purple-50 cursor-pointer transition">
+                  <div className="flex items-center gap-3 px-2 sm:px-3 py-2 rounded-md hover:bg-purple-50 cursor-pointer transition text-sm">
                     {item.icon}
-                    <span className="text-sm text-gray-800">{item.label}</span>
+                    <span className="text-gray-800 truncate">{item.label}</span>
                   </div>
                 </Link>
               ))}
@@ -106,7 +106,7 @@ export default function ProfileSidebar() {
         <Button
           onClick={() => logoutMutation.mutate()}
           variant="ghost"
-          className="w-full flex items-center justify-start gap-2 text-red-600 hover:bg-red-50"
+          className="w-full flex items-center justify-start gap-2 text-red-600 hover:bg-red-50 text-sm"
         >
           <LogOut className="w-4 h-4" />
           Logout

@@ -29,7 +29,6 @@ type Product = {
   isVisiable?: boolean;
 };
 
-
 const fetchProductById = async (id: string): Promise<Product> => {
   const res = await fetch(`${STRAPI_URL}/api/products/${id}?populate=image`);
   if (!res.ok) throw new Error('Product not found');
@@ -79,49 +78,48 @@ export default function ProductDetail() {
   const cartQty = cartItem?.quantity ?? 0;
 
   const handleAdd = async () => {
-  if (!product || !product.inStock) return;
-  try {
-    if (!cartItem) {
-      await addToCart(product, 1); // ✅ full product object
-      toast({ title: 'Added to Cart', description: `${product.name} added to your cart.` });
-    } else {
-      await updateQuantity(cartItem.id, cartQty + 1);
+    if (!product || !product.inStock) return;
+    try {
+      if (!cartItem) {
+        await addToCart(product, 1);
+        toast({ title: 'Added to Cart', description: `${product.name} added to your cart.` });
+      } else {
+        await updateQuantity(cartItem.id, cartQty + 1);
+      }
+    } catch {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong. Try again.',
+        variant: 'destructive',
+      });
     }
-  } catch {
-    toast({
-      title: 'Error',
-      description: 'Something went wrong. Try again.',
-      variant: 'destructive',
-    });
-  }
-};
+  };
 
-const handleRemove = async () => {
-  if (!cartItem) return;
-  try {
-    await updateQuantity(cartItem.id, cartQty - 1);
-  } catch {
-    toast({
-      title: 'Error',
-      description: 'Unable to update cart item.',
-      variant: 'destructive',
-    });
-  }
-};
-
+  const handleRemove = async () => {
+    if (!cartItem) return;
+    try {
+      await updateQuantity(cartItem.id, cartQty - 1);
+    } catch {
+      toast({
+        title: 'Error',
+        description: 'Unable to update cart item.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <Skeleton className="h-[600px] rounded-2xl" />
-            <div className="space-y-6">
-              <Skeleton className="h-8 w-3/4" />
-              <Skeleton className="h-6 w-1/2" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <Skeleton className="h-80 sm:h-96 lg:h-[600px] rounded-2xl" />
+            <div className="space-y-4 sm:space-y-6">
+              <Skeleton className="h-6 sm:h-8 w-3/4" />
+              <Skeleton className="h-4 sm:h-6 w-1/2" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="h-12 w-32" />
+              <Skeleton className="h-10 sm:h-12 w-32" />
             </div>
           </div>
         </div>
@@ -131,12 +129,12 @@ const handleRemove = async () => {
 
   if (error || !product || !product.isVisiable) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 text-center">
+      <div className="min-h-screen bg-gray-50 py-8 sm:py-12 text-center">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-6xl mb-4">🕯️</div>
-          <h1 className="text-3xl font-bold text-purple-dark mb-4">Product Not Available</h1>
-          <p className="text-purple-dark/70 mb-8">
-            The product you’re looking for is not visible or has been removed.
+          <div className="text-4xl sm:text-6xl mb-4">🕯️</div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-purple-dark mb-4">Product Not Available</h1>
+          <p className="text-purple-dark/70 mb-6 sm:mb-8 text-base sm:text-lg">
+            The product you're looking for is not visible or has been removed.
           </p>
           <Link href="/products">
             <Button className="bg-purple-primary text-white hover:bg-purple-primary/90">
@@ -149,57 +147,72 @@ const handleRemove = async () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link href="/products">
-          <Button variant="ghost" className="mb-8 text-purple-dark hover:text-purple-primary">
+          <Button variant="ghost" className="mb-6 sm:mb-8 text-purple-dark hover:text-purple-primary">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Products
           </Button>
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Product Image */}
           <div className="relative">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-[600px] object-cover rounded-2xl shadow-2xl"
+              className="w-full h-80 sm:h-96 lg:h-[600px] object-cover rounded-2xl shadow-2xl"
             />
             {product.featured && (
-              <Badge className="absolute top-6 right-6 bg-purple-primary text-white">Best Seller</Badge>
+              <Badge className="absolute top-4 sm:top-6 right-4 sm:right-6 bg-purple-primary text-white">
+                Best Seller
+              </Badge>
             )}
             {!product.inStock && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
-                <Badge variant="secondary" className="text-white bg-gray-800 text-lg px-4 py-2">Out of Stock</Badge>
+                <Badge variant="secondary" className="text-white bg-gray-800 text-base sm:text-lg px-4 py-2">
+                  Out of Stock
+                </Badge>
               </div>
             )}
           </div>
 
-          <div className="space-y-6">
-            <h1 className="text-4xl font-serif font-bold text-purple-dark mb-2">{product.name}</h1>
+          {/* Product Details */}
+          <div className="space-y-4 sm:space-y-6">
+            <div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-purple-dark mb-2">
+                {product.name}
+              </h1>
 
-            <p className="text-sm text-purple-dark/60 mb-4">
-              🏷️ Category:{' '}
-              <Badge variant="outline" className="text-purple-primary border-purple-primary ml-1">
-                {product.category}
-              </Badge>
+              <p className="text-sm text-purple-dark/60 mb-4">
+                🏷️ Category:{' '}
+                <Badge variant="outline" className="text-purple-primary border-purple-primary ml-1">
+                  {product.category}
+                </Badge>
+              </p>
+
+              <p className="text-xl sm:text-2xl font-bold text-purple-primary mb-4">
+                {formatPrice(product.price)}
+              </p>
+            </div>
+
+            <p className="text-base sm:text-lg text-purple-dark/80 leading-relaxed">
+              {product.description}
             </p>
-
-            <p className="text-2xl font-bold text-purple-primary mb-4">
-              {formatPrice(product.price)}
-            </p>
-
-            <p className="text-lg text-purple-dark/80 leading-relaxed mb-4">{product.description}</p>
 
             {product.scent && (
               <div>
                 <h3 className="font-semibold text-purple-dark mb-2">Scent Profile</h3>
-                <Badge variant="outline" className="text-purple-primary border-purple-primary">{product.scent}</Badge>
+                <Badge variant="outline" className="text-purple-primary border-purple-primary">
+                  {product.scent}
+                </Badge>
               </div>
             )}
 
+            {/* Product Details Card */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 sm:p-6 space-y-4">
                 <h3 className="font-semibold text-purple-dark mb-4">Product Details</h3>
                 {product.size && (
                   <div className="flex items-center space-x-3">
@@ -227,28 +240,47 @@ const handleRemove = async () => {
 
             <Separator />
 
+            {/* Add to Cart Section */}
             <div className="space-y-4">
               {product.inStock ? (
                 cartQty === 0 ? (
                   <Button
                     onClick={handleAdd}
-                    className="w-full bg-purple-primary text-white hover:bg-purple-primary/90 py-3 text-lg font-semibold"
+                    className="w-full bg-purple-primary text-white hover:bg-purple-primary/90 py-3 text-base sm:text-lg font-semibold"
                     size="lg"
                   >
                     Add to Cart - {formatPrice(product.price)}
                   </Button>
                 ) : (
                   <div className="flex items-center justify-between border rounded-lg px-4 py-3">
-                    <Button onClick={handleRemove} size="icon" variant="outline" className="text-purple-primary border-purple-primary">–</Button>
+                    <Button 
+                      onClick={handleRemove} 
+                      size="icon" 
+                      variant="outline" 
+                      className="text-purple-primary border-purple-primary h-10 w-10"
+                    >
+                      –
+                    </Button>
                     <span className="text-lg font-medium text-purple-dark">{cartQty}</span>
-                    <Button onClick={handleAdd} size="icon" variant="outline" className="text-purple-primary border-purple-primary">+</Button>
+                    <Button 
+                      onClick={handleAdd} 
+                      size="icon" 
+                      variant="outline" 
+                      className="text-purple-primary border-purple-primary h-10 w-10"
+                    >
+                      +
+                    </Button>
                   </div>
                 )
               ) : (
-                <Button disabled className="w-full bg-gray-400 text-white py-3 text-lg font-semibold">Out of Stock</Button>
+                <Button disabled className="w-full bg-gray-400 text-white py-3 text-base sm:text-lg font-semibold">
+                  Out of Stock
+                </Button>
               )}
 
-              <p className="text-sm text-purple-dark/60 text-center">Free shipping on orders over ₹50</p>
+              <p className="text-sm text-purple-dark/60 text-center">
+                Free shipping on orders over ₹50
+              </p>
             </div>
           </div>
         </div>

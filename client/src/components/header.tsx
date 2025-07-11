@@ -16,6 +16,7 @@ import { ProfileSlider } from './ProfileSlider';
 export function Header() {
   const [location, setLocation] = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
   const { user, isAuthenticated, isLoading, refetchUser } = useAuthContext();
   const { toast } = useToast();
@@ -61,6 +62,11 @@ export function Header() {
     { name: 'Contact', href: '/contact' },
   ];
 
+  const handleMobileNavClick = (href: string) => {
+    setIsMobileMenuOpen(false);
+    setLocation(href);
+  };
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,7 +74,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/">
-              <h1 className="text-2xl font-serif font-bold text-purple-primary cursor-pointer">
+              <h1 className="text-xl sm:text-2xl font-serif font-bold text-purple-primary cursor-pointer">
                 Essia
               </h1>
             </Link>
@@ -76,11 +82,11 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+            <div className="ml-10 flex items-baseline space-x-4 lg:space-x-8">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href}>
                   <span
-                    className={`font-medium transition-colors duration-200 cursor-pointer ${
+                    className={`font-medium transition-colors duration-200 cursor-pointer text-sm lg:text-base ${
                       location === item.href
                         ? 'text-purple-primary'
                         : 'text-purple-dark hover:text-purple-primary'
@@ -94,21 +100,21 @@ export function Header() {
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center space-x-4">
-            {/* Auth Buttons */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Auth Buttons - Desktop */}
             {!isLoading && isAuthenticated ? (
               <div className="hidden md:flex items-center space-x-2">
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-purple-dark hover:text-purple-primary"
+                  className="text-purple-dark hover:text-purple-primary text-sm"
                   onClick={() => setIsProfileOpen(true)}
                 >
                   Profile
                 </Button>
                 <Button
                   size="sm"
-                  className="bg-purple-primary hover:bg-purple-dark text-white"
+                  className="bg-purple-primary hover:bg-purple-dark text-white text-sm px-3"
                   onClick={() => logoutMutation.mutate()}
                   disabled={logoutMutation.isPending}
                 >
@@ -123,12 +129,12 @@ export function Header() {
               !isLoading && (
                 <div className="hidden md:flex items-center space-x-2">
                   <Link href="/login">
-                    <Button variant="ghost" size="sm" className="text-purple-dark hover:text-purple-primary">
+                    <Button variant="ghost" size="sm" className="text-purple-dark hover:text-purple-primary text-sm">
                       Login
                     </Button>
                   </Link>
                   <Link href="/register">
-                    <Button size="sm" className="bg-purple-primary hover:bg-purple-dark text-white">
+                    <Button size="sm" className="bg-purple-primary hover:bg-purple-dark text-white text-sm px-3">
                       Sign Up
                     </Button>
                   </Link>
@@ -141,82 +147,96 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-purple-dark hover:text-purple-primary relative"
+                className="text-purple-dark hover:text-purple-primary relative h-9 w-9 sm:h-10 sm:w-10"
               >
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {cartCount > 0 && (
                   <Badge
                     variant="destructive"
-                    className="absolute -top-2 -right-2 bg-purple-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center p-0"
+                    className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-purple-primary text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-[10px] sm:text-xs"
                   >
-                    {cartCount}
+                    {cartCount > 99 ? '99+' : cartCount}
                   </Badge>
                 )}
               </Button>
             </Link>
 
             {/* Mobile Menu */}
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden text-purple-dark hover:text-purple-primary"
+                  className="md:hidden text-purple-dark hover:text-purple-primary h-9 w-9"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetContent side="right" className="w-[280px] sm:w-[350px]">
                 <div className="flex flex-col space-y-6 mt-6">
-                  {navigation.map((item) => (
-                    <Link key={item.name} href={item.href}>
-                      <span
-                        className={`text-lg font-medium transition-colors duration-200 cursor-pointer ${
+                  {/* Navigation Links */}
+                  <div className="space-y-4">
+                    {navigation.map((item) => (
+                      <button
+                        key={item.name}
+                        onClick={() => handleMobileNavClick(item.href)}
+                        className={`block text-left text-lg font-medium transition-colors duration-200 w-full ${
                           location === item.href
                             ? 'text-purple-primary'
                             : 'text-purple-dark hover:text-purple-primary'
                         }`}
                       >
                         {item.name}
-                      </span>
-                    </Link>
-                  ))}
+                      </button>
+                    ))}
+                  </div>
 
-                  {!isLoading && isAuthenticated ? (
-                    <div className="flex flex-col space-y-4">
-                      <Button
-                        variant="ghost"
-                        className="text-left text-purple-dark hover:text-purple-primary"
-                        onClick={() => setIsProfileOpen(true)}
-                      >
-                        Profile
-                      </Button>
-                      <Button
-                        className="bg-purple-primary hover:bg-purple-dark text-white"
-                        onClick={() => logoutMutation.mutate()}
-                        disabled={logoutMutation.isPending}
-                      >
-                        {logoutMutation.isPending ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          "Logout"
-                        )}
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col space-y-4">
-                      <Link href="/login">
-                        <Button variant="ghost" className="text-left text-purple-dark hover:text-purple-primary">
+                  {/* Auth Section */}
+                  <div className="border-t pt-6">
+                    {!isLoading && isAuthenticated ? (
+                      <div className="flex flex-col space-y-4">
+                        <Button
+                          variant="ghost"
+                          className="justify-start text-purple-dark hover:text-purple-primary"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsProfileOpen(true);
+                          }}
+                        >
+                          Profile
+                        </Button>
+                        <Button
+                          className="bg-purple-primary hover:bg-purple-dark text-white"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            logoutMutation.mutate();
+                          }}
+                          disabled={logoutMutation.isPending}
+                        >
+                          {logoutMutation.isPending ? (
+                            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          ) : null}
+                          Logout
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col space-y-4">
+                        <Button
+                          variant="ghost"
+                          className="justify-start text-purple-dark hover:text-purple-primary"
+                          onClick={() => handleMobileNavClick('/login')}
+                        >
                           Login
                         </Button>
-                      </Link>
-                      <Link href="/register">
-                        <Button className="bg-purple-primary hover:bg-purple-dark text-white">
+                        <Button
+                          className="bg-purple-primary hover:bg-purple-dark text-white"
+                          onClick={() => handleMobileNavClick('/register')}
+                        >
                           Sign Up
                         </Button>
-                      </Link>
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

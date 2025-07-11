@@ -116,17 +116,17 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif font-bold text-purple-dark mb-4">Our Collection</h1>
-          <p className="text-lg text-purple-dark/70 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-purple-dark mb-4">Our Collection</h1>
+          <p className="text-base sm:text-lg text-purple-dark/70 max-w-2xl mx-auto">
             Discover our complete range of premium handcrafted candles.
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <form onSubmit={(e) => e.preventDefault()} className="md:col-span-2">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <form onSubmit={(e) => e.preventDefault()} className="sm:col-span-2 lg:col-span-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
@@ -170,8 +170,8 @@ export default function Products() {
         </div>
 
         {!isLoading && (
-          <div className="mb-8">
-            <p className="text-purple-dark/70">
+          <div className="mb-6 sm:mb-8">
+            <p className="text-purple-dark/70 text-sm sm:text-base">
               Showing {sortedProducts.length} product
               {sortedProducts.length !== 1 && 's'}
               {searchQuery && ` for "${searchQuery}"`}
@@ -182,23 +182,23 @@ export default function Products() {
         )}
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="space-y-4">
-                <Skeleton className="h-80 w-full rounded-xl" />
+                <Skeleton className="h-64 sm:h-80 w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
                 <div className="flex justify-between items-center">
                   <Skeleton className="h-6 w-16" />
-                  <Skeleton className="h-9 w-24" />
+                  <Skeleton className="h-9 w-20 sm:w-24" />
                 </div>
               </div>
             ))}
           </div>
         ) : isError ? (
-          <div className="text-center text-red-600">Failed to load products. Please try again.</div>
+          <div className="text-center text-red-600 text-base sm:text-lg">Failed to load products. Please try again.</div>
         ) : sortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {sortedProducts.map((product) => (
               <div key={product.id} className="h-full">
                 <ProductCard product={product} />
@@ -206,10 +206,10 @@ export default function Products() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🕯️</div>
-            <h3 className="text-2xl font-serif font-bold text-purple-dark mb-2">No Products Found</h3>
-            <p className="text-purple-dark/70 mb-6">
+          <div className="text-center py-8 sm:py-12">
+            <div className="text-4xl sm:text-6xl mb-4">🕯️</div>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-purple-dark mb-2">No Products Found</h3>
+            <p className="text-purple-dark/70 mb-4 sm:mb-6 text-sm sm:text-base">
               We couldn't find any products matching your criteria. Try adjusting your search or filters.
             </p>
             <Button

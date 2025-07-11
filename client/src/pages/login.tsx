@@ -27,7 +27,6 @@ import { PasswordInput } from "../components/ui/password-input";
 import { useToast } from "../hooks/use-toast";
 import { useAuthContext } from "../context/auth-context";
 import { apiRequest } from "../lib/queryClient";
-import { getApiErrorMessage } from "../lib/error";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "📧 Invalid email address" }),
@@ -110,30 +109,34 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 px-4 py-8">
+      <div className="w-full max-w-sm sm:max-w-md">
         <Card className="shadow-lg border-purple-200 dark:border-purple-800">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-purple-900 dark:text-purple-100">Welcome Back</CardTitle>
-            <CardDescription className="text-purple-600 dark:text-purple-300">
+          <CardHeader className="text-center space-y-2 pb-6">
+            <CardTitle className="text-xl sm:text-2xl text-purple-900 dark:text-purple-100">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-purple-600 dark:text-purple-300 text-sm sm:text-base">
               Sign in to your Essia account
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 sm:px-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-4 sm:space-y-6">
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-purple-800 dark:text-purple-200">Email</FormLabel>
+                      <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                        Email
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter your email"
                           type="email"
                           {...field}
-                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -146,12 +149,14 @@ export default function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-purple-800 dark:text-purple-200">Password</FormLabel>
+                      <FormLabel className="text-purple-800 dark:text-purple-200 text-sm">
+                        Password
+                      </FormLabel>
                       <FormControl>
                         <PasswordInput
                           placeholder="Enter your password"
                           {...field}
-                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600"
+                          className="border-purple-300 focus:border-purple-500 dark:border-purple-600 h-10 sm:h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -161,7 +166,7 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white h-10 sm:h-11 text-sm sm:text-base"
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing in..." : "Sign In"}
@@ -169,7 +174,7 @@ export default function Login() {
               </form>
             </Form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-4 sm:mt-6 text-center">
               <p className="text-sm text-purple-600 dark:text-purple-300">
                 Don't have an account?{" "}
                 <Link

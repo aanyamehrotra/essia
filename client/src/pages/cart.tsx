@@ -96,12 +96,12 @@ export default function Cart() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 flex space-x-4">
-                <div className="h-24 w-24 bg-gray-200 rounded" />
+              <div key={i} className="bg-white rounded-lg p-4 sm:p-6 flex space-x-4">
+                <div className="h-20 w-20 sm:h-24 sm:w-24 bg-gray-200 rounded" />
                 <div className="flex-1 space-y-2">
                   <div className="h-4 bg-gray-200 rounded w-1/2" />
                   <div className="h-4 bg-gray-200 rounded w-1/4" />
@@ -116,16 +116,16 @@ export default function Cart() {
 
   if (!cartItems.length) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <ShoppingBag className="mx-auto h-24 w-24 text-purple-primary/20 mb-8 animate-bounce" />
-          <h1 className="text-3xl font-serif font-bold text-purple-dark mb-4">Your Cart is Empty</h1>
-          <p className="text-purple-dark/70 mb-8 text-lg">
+          <ShoppingBag className="mx-auto h-16 w-16 sm:h-24 sm:w-24 text-purple-primary/20 mb-6 sm:mb-8 animate-bounce" />
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-purple-dark mb-4">Your Cart is Empty</h1>
+          <p className="text-purple-dark/70 mb-6 sm:mb-8 text-base sm:text-lg">
             Looks like you haven't added any candles to your cart yet.
           </p>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Link href="/products">
-              <Button className="bg-purple-primary text-white hover:bg-purple-primary/90 px-8 py-3">
+              <Button className="bg-purple-primary text-white hover:bg-purple-primary/90 px-6 sm:px-8 py-3">
                 Start Shopping
               </Button>
             </Link>
@@ -138,7 +138,7 @@ export default function Cart() {
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-gray-50 pb-8 sm:pb-12">
       {/* Sticky Header on Mobile */}
       <div className="sticky top-0 z-20 bg-gray-50 border-b px-4 py-4 lg:hidden">
         <h1 className="text-xl font-bold font-serif text-purple-dark">
@@ -146,8 +146,15 @@ export default function Cart() {
         </h1>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+        {/* Desktop Header */}
+        <div className="hidden lg:block mb-8">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-purple-dark">
+            Shopping Cart ({cartItems.length} item{cartItems.length > 1 ? 's' : ''})
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="lg:col-span-2 space-y-4">
             <AnimatePresence mode="popLayout">
               {cartItems.map((item, index) => (
@@ -160,25 +167,35 @@ export default function Cart() {
                   transition={{ delay: index * 0.05 }}
                 >
                   <Card className="shadow-md border border-gray-200">
-                    <CardContent className="p-6">
-                      <div className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        {/* Product Image */}
                         <Link href={`/products/${item.productId}`}>
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="h-24 w-24 rounded-lg object-cover transition-transform hover:scale-105 cursor-pointer"
+                            className="w-full sm:w-20 lg:w-24 h-48 sm:h-20 lg:h-24 rounded-lg object-cover transition-transform hover:scale-105 cursor-pointer"
                           />
                         </Link>
 
-                        <div className="min-w-0 space-y-1">
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
                           <Link href={`/products/${item.productId}`}>
-                            <h3 className="text-lg font-semibold text-purple-dark hover:text-purple-primary transition-colors cursor-pointer">
+                            <h3 className="text-base sm:text-lg font-semibold text-purple-dark hover:text-purple-primary transition-colors cursor-pointer line-clamp-2">
                               {item.name}
                             </h3>
                           </Link>
-                          <p className="text-sm text-purple-dark/60 line-clamp-2">{item.description}</p>
+                          <p className="text-sm text-purple-dark/60 line-clamp-2 mt-1">{item.description}</p>
 
-                          <div className="flex items-center gap-3 mt-2">
+                          {/* Mobile Price */}
+                          <div className="flex justify-between items-center mt-3 sm:hidden">
+                            <span className="text-lg font-bold text-purple-primary">
+                              {formatPrice(item.price * item.quantity)}
+                            </span>
+                          </div>
+
+                          {/* Quantity Controls */}
+                          <div className="flex items-center justify-between mt-3">
                             <div className="flex items-center border rounded overflow-hidden">
                               <Button
                                 variant="ghost"
@@ -216,11 +233,23 @@ export default function Cart() {
                                 )}
                               </Button>
                             </div>
+
+                            {/* Remove Button */}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-red-500 hover:text-red-700 sm:hidden"
+                              aria-label={`Remove ${item.name}`}
+                              onClick={() => handleRemoveItem(item.cartItemId, item.name)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
 
-                        <div className="flex flex-col items-end justify-between h-full gap-2">
-                          <span className="text-lg font-bold text-purple-dark">
+                        {/* Desktop Price and Remove */}
+                        <div className="hidden sm:flex flex-col items-end justify-between h-full gap-2">
+                          <span className="text-lg font-bold text-purple-primary">
                             {formatPrice(item.price * item.quantity)}
                           </span>
                           <Button
@@ -245,7 +274,7 @@ export default function Cart() {
           <div className="lg:col-span-1">
             <Card className="sticky top-24 bg-white border shadow-sm rounded-xl">
               <CardHeader>
-                <CardTitle className="text-purple-dark">Order Summary</CardTitle>
+                <CardTitle className="text-purple-dark text-lg sm:text-xl">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between text-purple-dark/80">
@@ -272,7 +301,7 @@ export default function Cart() {
 
                 <Link href="/checkout">
                   <Button
-                    className="w-full bg-purple-primary text-white hover:bg-purple-primary/90 py-3 text-lg font-semibold"
+                    className="w-full bg-purple-primary text-white hover:bg-purple-primary/90 py-3 text-base sm:text-lg font-semibold"
                     disabled={updatingItems.size > 0}
                   >
                     Proceed to Checkout
